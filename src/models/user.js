@@ -12,4 +12,4 @@ const user = (sequalize, DataTypes) => {
   return User;
 };
 
-module.exports = user;
+export default user;

@@ -1,8 +1,8 @@
-const Sequalize = require("sequelize");
-const { sequalize } = require("./database");
+import Sequalize from "sequelize";
+import { sequalize } from "./database";
 
-const UserModel = require("./user");
-const CarModel = require("./car");
+import UserModel from "./user";
+import CarModel from "./car";
 
 const models = {
   User: UserModel(sequalize, Sequalize.DataTypes),
@@ -16,4 +16,4 @@ Object.keys(models).forEach((key) => {
   }
 });
 
-module.exports = models;
+export default models;

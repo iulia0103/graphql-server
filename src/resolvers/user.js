@@ -5,7 +5,7 @@ const resolvers = {
     // me: (_, args, { me }) => me,
   },
   Mutation: {
-    makeUser: (_, { name }, { models }) => {
+    createUser: (_, { name }, { models }) => {
       const user = { name };
       return models.User.create(user);
     },
@@ -21,4 +21,4 @@ const resolvers = {
   },
 };
 
-module.exports = resolvers;
+export default resolvers;

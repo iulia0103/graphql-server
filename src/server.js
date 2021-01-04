@@ -1,19 +1,22 @@
-const express = require("express");
-const { ApolloServer } = require("apollo-server-express");
-const cors = require("cors");
+import express from "express";
+import { ApolloServer } from "apollo-server-express";
+import cors from "cors";
 
-require("dotenv").config();
+import { config } from "dotenv";
+
+import schema from "./schema/index";
+import resolvers from "./resolvers/index";
+import models from "./models/index";
+
+// require("dotenv").config();
+config();
 
 const app = express();
 
-const typeDefs = require("./schema");
-const resolvers = require("./resolvers");
-
-const models = require("./models");
 // const me = models.users[0];
 
 const server = new ApolloServer({
-  typeDefs,
+  typeDefs: schema,
   resolvers,
   context: {
     models,

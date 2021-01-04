@@ -4,7 +4,7 @@ const resolvers = {
     car: (_, { id }, { models }) => models.Car.findByPk(id),
   },
   Mutation: {
-    makeCar: (_, { brand, color }, { models }) => {
+    createCar: (_, { brand, color }, { models }) => {
       const car = { brand, color };
       return models.Car.create(car);
     },
@@ -19,4 +19,4 @@ const resolvers = {
   },
 };
 
-module.exports = resolvers;
+export default resolvers;

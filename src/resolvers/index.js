@@ -1,4 +1,4 @@
-const userResolvers = require("./user");
-const carResolvers = require("./car");
+import userResolvers from "./user";
+import carResolvers from "./car";
 
-module.exports = [userResolvers, carResolvers];
+export default [userResolvers, carResolvers];

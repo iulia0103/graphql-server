@@ -1,5 +1,5 @@
-const { sequalize } = require("./models/database");
-const models = require("./models");
+import { sequalize } from "./models/database";
+import models from "./models/index";
 
 const createData = async () => {
   await models.User.create(

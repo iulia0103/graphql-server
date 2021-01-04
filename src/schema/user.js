@@ -1,6 +1,6 @@
-const { gql } = require("apollo-server-express");
+import { gql } from "apollo-server-express";
 
-module.exports = gql`
+export default gql`
   extend type Query {
     users: [User]
     user(id: ID!): User
@@ -8,7 +8,7 @@ module.exports = gql`
   }
 
   extend type Mutation {
-    makeUser(name: String!): User!
+    createUser(name: String!): User!
     removeUser(id: ID!): Boolean
   }
 

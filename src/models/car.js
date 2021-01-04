@@ -15,4 +15,4 @@ const car = (sequalize, DataTypes) => {
   return Car;
 };
 
-module.exports = car;
+export default car;
