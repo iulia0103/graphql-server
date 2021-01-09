@@ -4,16 +4,20 @@ const resolvers = {
     car: (_, { id }, { models }) => models.Car.findByPk(id),
   },
   Mutation: {
-    createCar: (_, { brand, color }, { models, me }) => {
-      if (!me) {
+    createCar: (_, { brand, color }, { models, authenticatedUser }) => {
+      if (!authenticatedUser) {
         throw new Error("Not authenticated!");
       }
 
-      const car = { brand, color, userId: me.id };
+      const car = { brand, color, userId: authenticatedUser.id };
 
       return models.Car.create(car);
     },
-    removeCar: (_, { id }, { models }) => {
+    removeCar: (_, { id }, { models, authenticatedUser }) => {
+      if (!authenticatedUser) {
+        throw new Error("Not authenticated!");
+      }
+
       return models.Car.destroy({ where: { id } });
     },
   },

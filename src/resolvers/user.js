@@ -12,14 +12,22 @@ const resolvers = {
   Query: {
     users: (_, args, { models }) => models.User.findAll(),
     user: (_, { id }, { models }) => models.User.findByPk(id),
-    // me: (_, args, { me }) => me,
   },
   Mutation: {
-    createUser: (_, { name }, { models }) => {
+    createUser: (_, { name }, { models, authenticatedUser }) => {
+      if (!authenticatedUser) {
+        throw new Error("Not authenticated!");
+      }
+
       const user = { name };
+
       return models.User.create(user);
     },
-    removeUser: (_, { id }, { models }) => {
+    removeUser: (_, { id }, { models, authenticatedUser }) => {
+      if (!authenticatedUser) {
+        throw new Error("Not authenticated!");
+      }
+
       return models.User.destroy({ where: { id } });
     },
     register: async (_, { name, username, password }, { models }) => {

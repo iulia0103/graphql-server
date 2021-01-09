@@ -10,8 +10,6 @@ import models from "./models/index";
 
 const app = express();
 
-// const me = models.users[0];
-
 const getLoggedInUser = (req) => {
   const token = req.headers["x-auth-token"];
   if (token) {
@@ -30,7 +28,7 @@ const server = new ApolloServer({
   context: ({ req }) => ({
     models,
     secret: process.env.JWT_SECRET,
-    me: getLoggedInUser(req),
+    authenticatedUser: getLoggedInUser(req),
   }),
 });
 
