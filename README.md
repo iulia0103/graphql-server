@@ -15,9 +15,13 @@ Install project dependencies:
 Start server:
 `npm start`
 
+Graphql playground:
+`localhost:3000/graphql`
+
 Environment variables:
 `DB_NAME`
 `DB_USER`
 `DB_PASS`
+`JWT_SECRET`
 
 Note: build with Node 14

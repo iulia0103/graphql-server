@@ -1,5 +1,7 @@
+import "dotenv/config";
 import { sequalize } from "./models/database";
 import models from "./models/index";
+import faker from "faker/locale/en";
 
 const createData = async () => {
   await models.User.create(
@@ -9,6 +11,8 @@ const createData = async () => {
         { brand: "Audi", color: "red" },
         { brand: "Lambourghini", color: "yellow" },
       ],
+      username: faker.unique(faker.internet.email, [null, null, "iulia.com"]),
+      password: faker.internet.password(16),
     },
     {
       include: [models.Car],
@@ -16,16 +20,25 @@ const createData = async () => {
   );
 
   await models.User.create(
-    { name: "Vlad", cars: [{ brand: "Volvo", color: "silver" }] },
+    {
+      name: "Vlad",
+      cars: [{ brand: "Volvo", color: "silver" }],
+      username: faker.unique(faker.internet.email, [null, null, "vlad.com"]),
+      password: faker.internet.password(16),
+    },
     {
       include: [models.Car],
     }
   );
 
-  await models.User.create({ name: "Coco" });
+  await models.User.create({
+    name: "Coco",
+    username: faker.unique(faker.internet.email, [null, null, "coco.com"]),
+    password: faker.internet.password(16),
+  });
 };
 
-sequalize.sync().then(async () => {
+sequalize.sync({ force: true }).then(async () => {
   try {
     await createData();
     process.exit;

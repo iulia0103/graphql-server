@@ -1,27 +1,37 @@
+import "dotenv/config";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import cors from "cors";
-
-import { config } from "dotenv";
+import jwt from "jsonwebtoken";
 
 import schema from "./schema/index";
 import resolvers from "./resolvers/index";
 import models from "./models/index";
 
-// require("dotenv").config();
-config();
-
 const app = express();
 
 // const me = models.users[0];
 
+const getLoggedInUser = (req) => {
+  const token = req.headers["x-auth-token"];
+  if (token) {
+    try {
+      return jwt.verify(token, process.env.JWT_SECRET);
+    } catch (error) {
+      console.error(error);
+      throw new Error("Session expired!");
+    }
+  }
+};
+
 const server = new ApolloServer({
   typeDefs: schema,
   resolvers,
-  context: {
+  context: ({ req }) => ({
     models,
-    // me,
-  },
+    secret: process.env.JWT_SECRET,
+    me: getLoggedInUser(req),
+  }),
 });
 
 server.applyMiddleware({ app });
