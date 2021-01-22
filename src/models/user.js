@@ -26,6 +26,7 @@ const user = (sequalize, DataTypes) => {
         len: [8, 128],
       },
     },
+    photo: { type: DataTypes.STRING },
   });
 
   User.prototype.hashPassword = async function () {

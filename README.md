@@ -1,6 +1,6 @@
 # Apollo Express Server
 
-This is an exercise project build with Apollo Server and Express and containts endpoints for querying users and their cars.
+This is an authentication and authorisation example project build with Apollo Server and Express and containts endpoints for querying users and their cars.
 
 The database used is Postgres and the ORM is Sequalize.
 

@@ -1,6 +1,6 @@
 import "dotenv/config";
-import { sequalize } from "./models/database";
-import models from "./models/index";
+import { sequalize } from "../models/database";
+import models from "../models/index";
 import faker from "faker/locale/en";
 
 const createData = async () => {

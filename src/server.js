@@ -3,10 +3,17 @@ import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import cors from "cors";
 import jwt from "jsonwebtoken";
+import { v2 as cloudinary } from "cloudinary";
 
 import schema from "./schema/index";
 import resolvers from "./resolvers/index";
 import models from "./models/index";
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
 
 const app = express();
 

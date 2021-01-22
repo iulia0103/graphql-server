@@ -1,6 +1,9 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { sequalize } from "../models/database";
+import * as path from "path";
+import { v2 as cloudinary } from "cloudinary";
+import { GraphQLScalarType } from "graphql";
 
 const createToken = (user, secret, expiresIn) => {
   const { id, name, username } = user;
@@ -77,8 +80,33 @@ const resolvers = {
       }
 
       return {
-        token: createToken(user[0].dataValues, secret, "1m"),
+        token: createToken(user[0].dataValues, secret, "60m"),
       };
+    },
+    uploadImage: async (_, { filename }, { models, authenticatedUser }) => {
+      if (!authenticatedUser) {
+        throw new Error("Not authenticated!");
+      }
+
+      const mainDir = path.dirname(require.main.filename);
+      const file = `${mainDir}/dummyData/uploads/${filename}`;
+
+      try {
+        const photo = await cloudinary.uploader.upload(file);
+
+        await models.User.update(
+          {
+            photo: `${photo.public_id}.${photo.format}`,
+          },
+          {
+            where: { username: authenticatedUser.username },
+          }
+        );
+
+        return `${photo.public_id}.${photo.format}`;
+      } catch (error) {
+        throw new Error(error);
+      }
     },
   },
 
@@ -86,7 +114,45 @@ const resolvers = {
     cars: (parent, _, { models }) => {
       return models.Car.findAll({ where: { userId: parent.id } });
     },
+    photo: (parent, { options }) => {
+      //custom rezolver to override original value
+      if (!parent.photo) {
+        return null;
+      }
+
+      let cloudinaryOptions;
+
+      if (options) {
+        const [width, thumbnail] = options;
+
+        cloudinaryOptions = {
+          quality: "auto",
+          fetch_format: "auto",
+          width,
+          ...(thumbnail && { crop: "thumbnail", gravity: "face" }),
+          secure: true,
+        };
+      }
+      return cloudinary.url(parent.photo, cloudinaryOptions);
+    },
   },
+
+  CloudinaryOptions: new GraphQLScalarType({
+    name: "CloudinaryOptions",
+    parseValue(value) {
+      // value from the client
+      return value;
+    },
+    serialize(value) {
+      // value sent to the client
+      return value;
+    },
+    parseLiteral(ast) {
+      // string format
+      console.log("ast", ast);
+      return ast.value.split(",");
+    },
+  }),
 };
 
 export default resolvers;

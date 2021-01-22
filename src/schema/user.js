@@ -12,6 +12,7 @@ export default gql`
     removeUser(id: ID!): Boolean
     register(name: String!, username: String!, password: String!): Boolean!
     login(username: String!, password: String!): Token!
+    uploadImage(filename: String!): String!
   }
 
   # password is not added in the User type because we don't want to reetrieve it in queries
@@ -19,10 +20,13 @@ export default gql`
     id: ID!
     name: String!
     username: String!
+    photo(options: CloudinaryOptions): String
     cars: [Car]
   }
 
   type Token {
     token: String!
   }
+
+  scalar CloudinaryOptions
 `;
